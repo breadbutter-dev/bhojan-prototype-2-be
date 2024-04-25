@@ -49,5 +49,13 @@ app.use((req, res, next) => {
 app.use("/v0", v0Routes.router);
 app.use("/v1", v1Routes.router);
 app.use("/", swaggerUi.serve, swaggerUi.setup(null, options));
-mongoose.connect(mongoDbUrl, { useNewUrlParser: true });
+mongoose
+  .connect(mongoDbUrl, { useNewUrlParser: true })
+  .then(() => {
+    console.log("Connected to MongoDB: " + mongoDbUrl);
+  })
+  .catch((err) => {
+    console.error("Error connecting to MongoDB");
+    console.error(err);
+  });
 module.exports = app;
