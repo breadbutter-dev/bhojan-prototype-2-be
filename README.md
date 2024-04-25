@@ -1,4 +1,4 @@
-# Bhojan-backend
+# Bhojan Prototype 2 Backend:
 Prototype 2
 
 This project is based on [ReactJS in frontend](https://github.com/bug-tracker-software/bts-fe-prototype-2), NodeJS in backend and MongoDB as a database. It contains complete authentication, user management system and subscription management.
@@ -27,6 +27,49 @@ Nodejs and Express based api.
 `$ docker run --rm -d -p 3000:8080 --name app-container  app`
 3. To stop container
 `$ docker stop app-container`
+
+## RUN Full stack app with Docker
+### DOCKER-COMPOSE.YAML
+```
+version: '3.8'
+services: 
+  db:
+    image: mongo
+    container_name: mongo
+    ports:
+      - '27017:27017'
+    networks:
+      - bhojan-network
+    volumes:
+      - ./data:/data/db
+  backend:
+    build: ./bhojan-be-prototype-2
+    container_name: backend
+    ports:
+      - '3001:3001'
+    env_file:
+      - ./bhojan-be-prototype-2/.env.docker
+    networks:
+      - bhojan-network
+    depends_on:
+      - db
+  frontend:
+    build: ./bhojan-fe-prototype-2
+    container_name: frontend
+    ports:
+      - '3000:3000'
+    env_file:
+      - ./bhojan-fe-prototype-2/.env.docker
+    networks:
+      - bhojan-network
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+networks:
+  bhojan-network:
+    driver: bridge
+```
 
 
 ## Multer image upload tutorial
